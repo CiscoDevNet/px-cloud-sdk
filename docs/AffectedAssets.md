@@ -16,6 +16,9 @@
 |**lastOccurrence** | **OffsetDateTime** | Date the fault last occurred on the asset |  [optional] |
 |**faultId** | **Integer** | Unique identifier used in CX Cloud to identify the fault |  [optional] |
 |**serialNumber** | **String** | Unique Cisco serial number of the asset |  [optional] |
+|**mgmtSystemType** | **String** |  |  [optional] |
+|**mgmtSystemAddr** | **String** |  |  [optional] |
+|**mgmtSystemHostname** | **String** |  |  [optional] |
 
 
 

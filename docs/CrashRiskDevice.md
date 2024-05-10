@@ -9,6 +9,7 @@
 |------------ | ------------- | ------------- | -------------|
 |**assetId** | **String** |  |  [optional] |
 |**assetName** | **String** |  |  [optional] |
+|**assetUniqueId** | **String** |  |  [optional] |
 |**productId** | **String** |  |  [optional] |
 |**productFamily** | **String** |  |  [optional] |
 |**ipAddress** | **String** |  |  [optional] |
@@ -17,6 +18,9 @@
 |**serialNumber** | **String** |  |  [optional] |
 |**risk** | **String** |  |  [optional] |
 |**endDate** | **String** |  |  [optional] |
+|**mgmtSystemType** | **String** |  |  [optional] |
+|**mgmtSystemHostname** | **String** |  |  [optional] |
+|**mgmtSystemAddr** | **String** |  |  [optional] |
 
 
 

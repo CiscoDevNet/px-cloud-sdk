@@ -1,20 +1,19 @@
 # CustomerDataApi
 
-All URIs are relative to *https://api-cx.cisco.com/px*
+All URIs are relative to *https://api-cx.cisco.com/sandbox/px*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**fetchContractsDetailsUsingGET**](CustomerDataApi.md#fetchContractsDetailsUsingGET) | **GET** /v1/contract/details | Get the list of contracts Details from flat table. It supports pagination , filtering and sorting |
-| [**getCustomerReport**](CustomerDataApi.md#getCustomerReport) | **GET** /v1/customers/{customerId}/reports/{reportId} | Get the report |
-| [**getCustomersLifeCycle**](CustomerDataApi.md#getCustomersLifeCycle) | **GET** /v1/customers/{customerId}/lifecycle | Get customer lifecycle |
-| [**requestCustomerReport**](CustomerDataApi.md#requestCustomerReport) | **POST** /v1/customers/{customerId}/reports | Request customer data reports as bulk files |
+| [**getCustomers**](CustomerDataApi.md#getCustomers) | **GET** /v1/customers | List customers |
+| [**getReportStatus**](CustomerDataApi.md#getReportStatus) | **GET** /v1/customers/{customerId}/reports/{reportId} | Get report status and location |
+| [**postReports**](CustomerDataApi.md#postReports) | **POST** /v1/customers/{customerId}/reports | Request customer data report |
 
 
-<a name="fetchContractsDetailsUsingGET"></a>
-# **fetchContractsDetailsUsingGET**
-> DataPaginationResponse fetchContractsDetailsUsingGET(contractNumber, puid, componentType, customerId, limit, offset, successTrackId)
+<a id="getCustomers"></a>
+# **getCustomers**
+> CustomerResponse getCustomers(max, offset)
 
-Get the list of contracts Details from flat table. It supports pagination , filtering and sorting
+List customers
 
 ### Example
 ```java
@@ -29,25 +28,20 @@ import com.cisco.px.client.api.CustomerDataApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("https://api-cx.cisco.com/px");
+    defaultClient.setBasePath("https://api-cx.cisco.com/sandbox/px");
     
     // Configure OAuth2 access token for authorization: oAuth2
     OAuth oAuth2 = (OAuth) defaultClient.getAuthentication("oAuth2");
     oAuth2.setAccessToken("YOUR ACCESS TOKEN");
 
     CustomerDataApi apiInstance = new CustomerDataApi(defaultClient);
-    Integer contractNumber = 56; // Integer | contractNumber
-    Integer puid = 56; // Integer | puid
-    String componentType = "componentType_example"; // String | componentType
-    String customerId = "customerId_example"; // String | customerId
-    Integer limit = 56; // Integer | 
-    Integer offset = 56; // Integer | 
-    Long successTrackId = 56L; // Long | successTrackId
+    Integer max = 10; // Integer | The maximum number of items to return. The default value is 10.
+    Integer offset = 1; // Integer | The number of items to skip before starting to collect the result set. The default value is 1.
     try {
-      DataPaginationResponse result = apiInstance.fetchContractsDetailsUsingGET(contractNumber, puid, componentType, customerId, limit, offset, successTrackId);
+      CustomerResponse result = apiInstance.getCustomers(max, offset);
       System.out.println(result);
     } catch (ApiException e) {
-      System.err.println("Exception when calling CustomerDataApi#fetchContractsDetailsUsingGET");
+      System.err.println("Exception when calling CustomerDataApi#getCustomers");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -61,17 +55,12 @@ public class Example {
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **contractNumber** | **Integer**| contractNumber | |
-| **puid** | **Integer**| puid | |
-| **componentType** | **String**| componentType | [optional] |
-| **customerId** | **String**| customerId | [optional] |
-| **limit** | **Integer**|  | [optional] |
-| **offset** | **Integer**|  | [optional] |
-| **successTrackId** | **Long**| successTrackId | [optional] |
+| **max** | **Integer**| The maximum number of items to return. The default value is 10. | [optional] [default to 10] |
+| **offset** | **Integer**| The number of items to skip before starting to collect the result set. The default value is 1. | [optional] [default to 1] |
 
 ### Return type
 
-[**DataPaginationResponse**](DataPaginationResponse.md)
+[**CustomerResponse**](CustomerResponse.md)
 
 ### Authorization
 
@@ -85,20 +74,22 @@ public class Example {
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Successfully Fetched Contract Details for Given Partner |  * Date -  <br>  |
-| **400** | Bad Input |  * Date -  <br>  |
-| **401** | Unauthorized |  * Date -  <br>  |
-| **403** | Forbidden |  * Date -  <br>  |
-| **404** | Entity Not Found |  * Date -  <br>  |
-| **500** | Error during fetch |  * Date -  <br>  |
+| **200** | OK |  * Link - URLs for previous (&#x60;rel&#x3D;\&quot;prev\&quot;&#x60;) and/or next (&#x60;rel&#x3D;\&quot;next\&quot;&#x60;) page of items <br>  |
+| **400** | Bad Request |  -  |
+| **401** | Unauthorized |  -  |
+| **403** | Forbidden |  -  |
+| **404** | Not found |  -  |
+| **500** | Internal server error |  -  |
+| **503** | Service Unavailable |  -  |
+| **504** | Gateway timeout |  -  |
 
-<a name="getCustomerReport"></a>
-# **getCustomerReport**
-> List&lt;ReportStatus&gt; getCustomerReport(reportId, customerId)
+<a id="getReportStatus"></a>
+# **getReportStatus**
+> ReportStatus getReportStatus(customerId, reportId)
 
-Get the report
+Get report status and location
 
-Provides the status of resource. The status API provides additional info about the progress of the report. Partner application should poll periodically to get status of the report. When the report is complete the API responds with the 303 status pointing to final report in the Location header.
+If report is in-progress (&#x60;200 OK&#x60;), body will include status description and suggested poll/retry interval.  If ready (&#x60;303 See Other&#x60;), &#x60;Location&#x60; header will contain the final report download URL.
 
 ### Example
 ```java
@@ -113,20 +104,20 @@ import com.cisco.px.client.api.CustomerDataApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("https://api-cx.cisco.com/px");
+    defaultClient.setBasePath("https://api-cx.cisco.com/sandbox/px");
     
     // Configure OAuth2 access token for authorization: oAuth2
     OAuth oAuth2 = (OAuth) defaultClient.getAuthentication("oAuth2");
     oAuth2.setAccessToken("YOUR ACCESS TOKEN");
 
     CustomerDataApi apiInstance = new CustomerDataApi(defaultClient);
-    String reportId = "reportId_example"; // String | Report id
-    String customerId = "customerId_example"; // String | Unique identifier for the Customer
+    String customerId = "customerId_example"; // String | Unique identifier of the customer
+    String reportId = "reportId_example"; // String | reportId returned by a report generation request.
     try {
-      List<ReportStatus> result = apiInstance.getCustomerReport(reportId, customerId);
+      ReportStatus result = apiInstance.getReportStatus(customerId, reportId);
       System.out.println(result);
     } catch (ApiException e) {
-      System.err.println("Exception when calling CustomerDataApi#getCustomerReport");
+      System.err.println("Exception when calling CustomerDataApi#getReportStatus");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -140,12 +131,12 @@ public class Example {
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **reportId** | **String**| Report id | |
-| **customerId** | **String**| Unique identifier for the Customer | |
+| **customerId** | **String**| Unique identifier of the customer | |
+| **reportId** | **String**| reportId returned by a report generation request. | |
 
 ### Return type
 
-[**List&lt;ReportStatus&gt;**](ReportStatus.md)
+[**ReportStatus**](ReportStatus.md)
 
 ### Authorization
 
@@ -159,97 +150,23 @@ public class Example {
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Provides the status of the report |  * Date -  <br>  |
-| **303** | Provides the final report resource to download the file |  * Date -  <br>  * Location - downloadable URL <br>  |
-| **400** | Bad Request |  * Date -  <br>  |
-| **403** | Forbidden |  * Date -  <br>  |
-| **404** | Not Found |  * Date -  <br>  |
-| **500** | Internal server error |  * Date -  <br>  |
-| **503** | Service Unavailable |  * Date -  <br>  |
-| **504** | Gateway timeout |  * Date -  <br>  |
+| **200** | OK |  -  |
+| **303** | See Other |  * Location - Final report download URL. <br>  |
+| **400** | Bad Request |  -  |
+| **401** | Unauthorized |  -  |
+| **403** | Forbidden |  -  |
+| **404** | Not found |  -  |
+| **500** | Internal server error |  -  |
+| **503** | Service Unavailable |  -  |
+| **504** | Gateway timeout |  -  |
 
-<a name="getCustomersLifeCycle"></a>
-# **getCustomersLifeCycle**
-> RacetrackBuid getCustomersLifeCycle(successTrackId, customerId)
+<a id="postReports"></a>
+# **postReports**
+> postReports(customerId, report)
 
-Get customer lifecycle
+Request customer data report
 
-Get customer lifecycle which will provide the CX solution, use case and pitstop information for the customer
-
-### Example
-```java
-// Import classes:
-import com.cisco.px.client.ApiClient;
-import com.cisco.px.client.ApiException;
-import com.cisco.px.client.Configuration;
-import com.cisco.px.client.auth.*;
-import com.cisco.px.client.models.*;
-import com.cisco.px.client.api.CustomerDataApi;
-
-public class Example {
-  public static void main(String[] args) {
-    ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("https://api-cx.cisco.com/px");
-    
-    // Configure OAuth2 access token for authorization: oAuth2
-    OAuth oAuth2 = (OAuth) defaultClient.getAuthentication("oAuth2");
-    oAuth2.setAccessToken("YOUR ACCESS TOKEN");
-
-    CustomerDataApi apiInstance = new CustomerDataApi(defaultClient);
-    String successTrackId = "successTrackId_example"; // String | 
-    String customerId = "customerId_example"; // String | Unique identifier for the Customer
-    try {
-      RacetrackBuid result = apiInstance.getCustomersLifeCycle(successTrackId, customerId);
-      System.out.println(result);
-    } catch (ApiException e) {
-      System.err.println("Exception when calling CustomerDataApi#getCustomersLifeCycle");
-      System.err.println("Status code: " + e.getCode());
-      System.err.println("Reason: " + e.getResponseBody());
-      System.err.println("Response headers: " + e.getResponseHeaders());
-      e.printStackTrace();
-    }
-  }
-}
-```
-
-### Parameters
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **successTrackId** | **String**|  | |
-| **customerId** | **String**| Unique identifier for the Customer | |
-
-### Return type
-
-[**RacetrackBuid**](RacetrackBuid.md)
-
-### Authorization
-
-[oAuth2](../README.md#oAuth2)
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | successful operation |  * Date -  <br>  |
-| **400** | Bad Request |  * Date -  <br>  |
-| **403** | Forbidden |  * Date -  <br>  |
-| **404** | Not Found |  * Date -  <br>  |
-| **500** | Internal server error |  * Date -  <br>  |
-| **503** | Service Unavailable |  * Date -  <br>  |
-| **504** | Gateway timeout |  * Date -  <br>  |
-
-<a name="requestCustomerReport"></a>
-# **requestCustomerReport**
-> requestCustomerReport(customerId, report)
-
-Request customer data reports as bulk files
-
-Request customer data report. Creating a request for customer data sets like Assets, Hardware, Software and Advisories bulk json files
+Report generation is asynchronous. The response &#x60;Location&#x60; header will contain the report status URL.
 
 ### Example
 ```java
@@ -264,19 +181,19 @@ import com.cisco.px.client.api.CustomerDataApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("https://api-cx.cisco.com/px");
+    defaultClient.setBasePath("https://api-cx.cisco.com/sandbox/px");
     
     // Configure OAuth2 access token for authorization: oAuth2
     OAuth oAuth2 = (OAuth) defaultClient.getAuthentication("oAuth2");
     oAuth2.setAccessToken("YOUR ACCESS TOKEN");
 
     CustomerDataApi apiInstance = new CustomerDataApi(defaultClient);
-    String customerId = "customerId_example"; // String | Unique identifier for the Customer
-    Report report = new Report(); // Report | report infromation
+    String customerId = "customerId_example"; // String | Unique identifier of the customer
+    Report report = new Report(); // Report | Report request details.
     try {
-      apiInstance.requestCustomerReport(customerId, report);
+      apiInstance.postReports(customerId, report);
     } catch (ApiException e) {
-      System.err.println("Exception when calling CustomerDataApi#requestCustomerReport");
+      System.err.println("Exception when calling CustomerDataApi#postReports");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -290,8 +207,8 @@ public class Example {
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **customerId** | **String**| Unique identifier for the Customer | |
-| **report** | [**Report**](Report.md)| report infromation | [optional] |
+| **customerId** | **String**| Unique identifier of the customer | |
+| **report** | [**Report**](Report.md)| Report request details. | [optional] |
 
 ### Return type
 
@@ -309,11 +226,12 @@ null (empty response body)
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **202** | Accepted |  * Location - downloadable URL <br>  * Date -  <br>  |
-| **400** | Bad Request |  * Location - downloadable URL <br>  * Date -  <br>  |
-| **403** | Forbidden |  * Location - downloadable URL <br>  * Date -  <br>  |
-| **404** | Not Found |  * Location - downloadable URL <br>  * Date -  <br>  |
-| **500** | Internal server error |  * Location - downloadable URL <br>  * Date -  <br>  |
-| **503** | Service Unavailable |  * Location - downloadable URL <br>  * Date -  <br>  |
-| **504** | Gateway timeout |  * Location - downloadable URL <br>  * Date -  <br>  |
+| **202** | Accepted |  * Location - Final report download URL. <br>  |
+| **400** | Bad Request |  -  |
+| **401** | Unauthorized |  -  |
+| **403** | Forbidden |  -  |
+| **404** | Not found |  -  |
+| **500** | Internal server error |  -  |
+| **503** | Service Unavailable |  -  |
+| **504** | Gateway timeout |  -  |
 

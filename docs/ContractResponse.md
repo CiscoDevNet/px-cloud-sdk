@@ -7,7 +7,7 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**data** | [**List&lt;ContractInfo&gt;**](ContractInfo.md) |  |  [optional] |
+|**items** | [**List&lt;Contract&gt;**](Contract.md) |  |  [optional] |
 |**totalCount** | **Integer** |  |  [optional] |
 
 

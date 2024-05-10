@@ -7,6 +7,7 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
+|**additionalInfo** | **String** |  |  [optional] |
 |**assetId** | **String** |  |  [optional] |
 |**assetType** | **String** |  |  [optional] |
 |**complies** | **Boolean** |  |  [optional] |

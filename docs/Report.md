@@ -7,7 +7,8 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**reportName** | [**ReportNameEnum**](#ReportNameEnum) | Report containing data for the given customer |  [optional] |
+|**reportName** | [**ReportNameEnum**](#ReportNameEnum) |  |  [optional] |
+|**successTrackId** | **String** |  |  [optional] |
 
 
 
@@ -16,9 +17,13 @@
 | Name | Value |
 |---- | -----|
 | ASSETS | &quot;Assets&quot; |
+| FIELDNOTICES | &quot;FieldNotices&quot; |
 | HARDWARE | &quot;Hardware&quot; |
+| LICENSES | &quot;Licenses&quot; |
+| PURCHASEDLICENSES | &quot;PurchasedLicenses&quot; |
+| SECURITYADVISORIES | &quot;SecurityAdvisories&quot; |
 | SOFTWARE | &quot;Software&quot; |
-| ADVISORIES | &quot;Advisories&quot; |
+| PRIORITYBUGS | &quot;PriorityBugs&quot; |
 
 
 

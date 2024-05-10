@@ -9,7 +9,7 @@
 |------------ | ------------- | ------------- | -------------|
 |**totalCount** | **Long** |  |  [optional] |
 |**crashPredicted** | **Boolean** |  |  [optional] |
-|**devices** | [**List&lt;CrashRiskDevice&gt;**](CrashRiskDevice.md) |  |  [optional] |
+|**items** | [**List&lt;CrashRiskDevice&gt;**](CrashRiskDevice.md) |  |  [optional] |
 
 
 

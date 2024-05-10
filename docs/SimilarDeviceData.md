@@ -8,6 +8,7 @@
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
 |**assetId** | **String** |  |  [optional] |
+|**assetUniqueId** | **String** |  |  [optional] |
 |**assetName** | **String** |  |  [optional] |
 |**productFamily** | **String** |  |  [optional] |
 |**productId** | **String** |  |  [optional] |

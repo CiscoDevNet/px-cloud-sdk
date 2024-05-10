@@ -15,9 +15,12 @@
 |**faultId** | **Integer** | Unique identifier used in CX Cloud to identify the fault |  [optional] |
 |**category** | **String** | The category assigned to the fault by CX Cloud, for example System, CPU-Memory, Services, and Environment |  [optional] |
 |**openCases** | **Integer** | Number of Cisco support cases automatically created for the fault |  [optional] |
-|**affectedAssets** | **String** | Number of assets affected by the fault |  [optional] |
+|**affectedAssets** | **Integer** | Number of assets affected by the fault |  [optional] |
 |**occurences** | **Integer** | Number of times the fault occurred |  [optional] |
 |**ignoredAssets** | **Integer** | Number of assets the fault is ignored for |  [optional] |
+|**mgmtSystemType** | **String** |  |  [optional] |
+|**mgmtSystemAddr** | **String** |  |  [optional] |
+|**mgmtSystemHostname** | **String** |  |  [optional] |
 
 
 

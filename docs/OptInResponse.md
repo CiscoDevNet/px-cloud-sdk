@@ -8,7 +8,7 @@
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
 |**status** | **String** |  |  [optional] |
-|**hasQualifiedAssets** | **String** |  |  [optional] |
+|**hasQualifiedAssets** | **Boolean** |  |  [optional] |
 
 
 

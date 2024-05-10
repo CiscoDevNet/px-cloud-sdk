@@ -1,5 +1,8 @@
 package com.cisco.px.client.auth;
 
+import com.cisco.px.client.ApiException;
+import com.cisco.px.client.Pair;
+
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -13,9 +16,6 @@ import org.apache.oltu.oauth2.client.response.OAuthJSONAccessTokenResponse;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.GrantType;
-
-import com.cisco.px.client.ApiException;
-import com.cisco.px.client.Pair;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -65,8 +65,8 @@ public class RetryingOAuth extends OAuth implements Interceptor {
                 .setClientSecret(clientSecret));
         setFlow(flow);
         if (parameters != null) {
-            for (String paramName : parameters.keySet()) {
-                tokenRequestBuilder.setParameter(paramName, parameters.get(paramName));
+            for (Map.Entry<String, String> entry : parameters.entrySet()) {
+                tokenRequestBuilder.setParameter(entry.getKey(), entry.getValue());
             }
         }
     }
@@ -129,8 +129,8 @@ public class RetryingOAuth extends OAuth implements Interceptor {
             }
 
             Map<String, String> headers = oAuthRequest.getHeaders();
-            for (String headerName : headers.keySet()) {
-                requestBuilder.addHeader(headerName, headers.get(headerName));
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
+                requestBuilder.addHeader(entry.getKey(), entry.getValue());
             }
             requestBuilder.url(oAuthRequest.getLocationUri());
 

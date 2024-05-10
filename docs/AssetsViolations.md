@@ -18,6 +18,9 @@
 |**lastChecked** | **String** |  |  [optional] |
 |**scanStatus** | **Boolean** |  |  [optional] |
 |**violationCount** | **Long** |  |  [optional] |
+|**mgmtSystemHostname** | **String** |  |  [optional] |
+|**role** | **String** |  |  [optional] |
+|**mgmtSystemType** | **String** |  |  [optional] |
 
 
 

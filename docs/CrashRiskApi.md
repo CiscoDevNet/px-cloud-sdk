@@ -1,23 +1,21 @@
 # CrashRiskApi
 
-All URIs are relative to *https://api-cx.cisco.com/px*
+All URIs are relative to *https://api-cx.cisco.com/sandbox/px*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**assetRiskFactorsUsingGet**](CrashRiskApi.md#assetRiskFactorsUsingGet) | **GET** /v1/customers/{customerId}/insights/crashRisk/assets/{assetIdBase64}/riskFactors | Get risk factors of a device |
-| [**assetsCrashedUsingGET**](CrashRiskApi.md#assetsCrashedUsingGET) | **GET** /v1/customers/{customerId}/insights/crashRisk/assetsCrashed | Get the list of crashed devices for last given time period |
-| [**crashHistoryUsingGET**](CrashRiskApi.md#crashHistoryUsingGET) | **GET** /v1/customers/{customerId}/insights/crashRisk/asset/{assetIdBase64}/crashHistory | Get the device crash-detail - Asset 360(time stamp, reset reason) |
-| [**crashRiskAssetsUsingGet**](CrashRiskApi.md#crashRiskAssetsUsingGet) | **GET** /v1/customers/{customerId}/insights/crashRisk/assets | Get devices which are at risk of crash owned by a customer, sorted by risk score in descending order by default |
-| [**similarAssetsUsingGet**](CrashRiskApi.md#similarAssetsUsingGet) | **GET** /v1/customers/{customerId}/insights/crashRisk/assets/{assetIdBase64}/similarAssets | Get similar assets based on the similarity score |
+| [**getCrashAssetCrashHistory**](CrashRiskApi.md#getCrashAssetCrashHistory) | **GET** /v1/customers/{customerId}/insights/crashRisk/asset/{assetUniqueId}/crashHistory | List asset crash history incidents |
+| [**getCrashRiskAssetRiskFactors**](CrashRiskApi.md#getCrashRiskAssetRiskFactors) | **GET** /v1/customers/{customerId}/insights/crashRisk/assets/{assetUniqueId}/riskFactors | List crash risk asset risk factors |
+| [**getCrashRiskAssetSimilarAssets**](CrashRiskApi.md#getCrashRiskAssetSimilarAssets) | **GET** /v1/customers/{customerId}/insights/crashRisk/assets/{assetUniqueId}/similarAssets | List crash risk asset similar assets |
+| [**getCrashRiskAssets**](CrashRiskApi.md#getCrashRiskAssets) | **GET** /v1/customers/{customerId}/insights/crashRisk/assets | List assets at risk of crashing |
+| [**listCrashRiskAssetsCrashed**](CrashRiskApi.md#listCrashRiskAssetsCrashed) | **GET** /v1/customers/{customerId}/insights/crashRisk/assetsCrashed | List assets which have crashed |
 
 
-<a name="assetRiskFactorsUsingGet"></a>
-# **assetRiskFactorsUsingGet**
-> DeviceRiskFactors assetRiskFactorsUsingGet(successTrackId, customerId, assetIdBase64)
+<a id="getCrashAssetCrashHistory"></a>
+# **getCrashAssetCrashHistory**
+> DeviceCrashDetail getCrashAssetCrashHistory(customerId, assetUniqueId, successTrackId)
 
-Get risk factors of a device
-
-This API provides list of risk factors that contribute to the high risk score. Default sorting is factorWeight
+List asset crash history incidents
 
 ### Example
 ```java
@@ -25,23 +23,28 @@ This API provides list of risk factors that contribute to the high risk score. D
 import com.cisco.px.client.ApiClient;
 import com.cisco.px.client.ApiException;
 import com.cisco.px.client.Configuration;
+import com.cisco.px.client.auth.*;
 import com.cisco.px.client.models.*;
 import com.cisco.px.client.api.CrashRiskApi;
 
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("https://api-cx.cisco.com/px");
+    defaultClient.setBasePath("https://api-cx.cisco.com/sandbox/px");
+    
+    // Configure OAuth2 access token for authorization: oAuth2
+    OAuth oAuth2 = (OAuth) defaultClient.getAuthentication("oAuth2");
+    oAuth2.setAccessToken("YOUR ACCESS TOKEN");
 
     CrashRiskApi apiInstance = new CrashRiskApi(defaultClient);
+    String customerId = "customerId_example"; // String | Unique identifier of the customer
+    String assetUniqueId = "assetUniqueId_example"; // String | assetId encoded as a Base64 string. This parameter is available as a response parameter of the /crashRisk/assets API
     String successTrackId = "successTrackId_example"; // String | 
-    String customerId = "customerId_example"; // String | 
-    String assetIdBase64 = "assetIdBase64_example"; // String | base64 encoded value of the assetId
     try {
-      DeviceRiskFactors result = apiInstance.assetRiskFactorsUsingGet(successTrackId, customerId, assetIdBase64);
+      DeviceCrashDetail result = apiInstance.getCrashAssetCrashHistory(customerId, assetUniqueId, successTrackId);
       System.out.println(result);
     } catch (ApiException e) {
-      System.err.println("Exception when calling CrashRiskApi#assetRiskFactorsUsingGet");
+      System.err.println("Exception when calling CrashRiskApi#getCrashAssetCrashHistory");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -55,148 +58,9 @@ public class Example {
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
+| **customerId** | **String**| Unique identifier of the customer | |
+| **assetUniqueId** | **String**| assetId encoded as a Base64 string. This parameter is available as a response parameter of the /crashRisk/assets API | |
 | **successTrackId** | **String**|  | |
-| **customerId** | **String**|  | |
-| **assetIdBase64** | **String**| base64 encoded value of the assetId | |
-
-### Return type
-
-[**DeviceRiskFactors**](DeviceRiskFactors.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Ok |  * Date -  <br>  |
-| **400** | Bad Request |  * Date -  <br>  |
-| **401** | Unauthorized |  * Date -  <br>  |
-| **403** | Forbidden error |  * Date -  <br>  |
-| **404** | Not Found |  * Date -  <br>  |
-
-<a name="assetsCrashedUsingGET"></a>
-# **assetsCrashedUsingGET**
-> InventoryCrashDetails assetsCrashedUsingGET(successTrackId, customerId, timePeriod)
-
-Get the list of crashed devices for last given time period
-
-This API provides the list of devices with details (i.e. Asset, Product Id, Product Family, Software Version, Crash Count, First Occurrence and Last Occurrence) by customer Id that have crashed in the last 1d,7d,15d,90d based on the filter input. Default sort is by lastCrashDate
-
-### Example
-```java
-// Import classes:
-import com.cisco.px.client.ApiClient;
-import com.cisco.px.client.ApiException;
-import com.cisco.px.client.Configuration;
-import com.cisco.px.client.models.*;
-import com.cisco.px.client.api.CrashRiskApi;
-
-public class Example {
-  public static void main(String[] args) {
-    ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("https://api-cx.cisco.com/px");
-
-    CrashRiskApi apiInstance = new CrashRiskApi(defaultClient);
-    String successTrackId = "successTrackId_example"; // String | 
-    String customerId = "customerId_example"; // String | customerId
-    String timePeriod = "1"; // String | timePeriod
-    try {
-      InventoryCrashDetails result = apiInstance.assetsCrashedUsingGET(successTrackId, customerId, timePeriod);
-      System.out.println(result);
-    } catch (ApiException e) {
-      System.err.println("Exception when calling CrashRiskApi#assetsCrashedUsingGET");
-      System.err.println("Status code: " + e.getCode());
-      System.err.println("Reason: " + e.getResponseBody());
-      System.err.println("Response headers: " + e.getResponseHeaders());
-      e.printStackTrace();
-    }
-  }
-}
-```
-
-### Parameters
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **successTrackId** | **String**|  | |
-| **customerId** | **String**| customerId | |
-| **timePeriod** | **String**| timePeriod | [optional] [default to 1] |
-
-### Return type
-
-[**InventoryCrashDetails**](InventoryCrashDetails.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  * Date -  <br>  |
-| **401** | Unauthorized |  * Date -  <br>  |
-| **403** | Forbidden |  * Date -  <br>  |
-| **404** | Not Found |  * Date -  <br>  |
-
-<a name="crashHistoryUsingGET"></a>
-# **crashHistoryUsingGET**
-> DeviceCrashDetail crashHistoryUsingGET(successTrackId, customerId, assetIdBase64)
-
-Get the device crash-detail - Asset 360(time stamp, reset reason)
-
-Details of the number of times the device crashed in the last 365 days with reset reason. Default sort is by timeStamp
-
-### Example
-```java
-// Import classes:
-import com.cisco.px.client.ApiClient;
-import com.cisco.px.client.ApiException;
-import com.cisco.px.client.Configuration;
-import com.cisco.px.client.models.*;
-import com.cisco.px.client.api.CrashRiskApi;
-
-public class Example {
-  public static void main(String[] args) {
-    ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("https://api-cx.cisco.com/px");
-
-    CrashRiskApi apiInstance = new CrashRiskApi(defaultClient);
-    String successTrackId = "successTrackId_example"; // String | 
-    String customerId = "customerId_example"; // String | customerId
-    String assetIdBase64 = "assetIdBase64_example"; // String | base64 encoded value of the assetId
-    try {
-      DeviceCrashDetail result = apiInstance.crashHistoryUsingGET(successTrackId, customerId, assetIdBase64);
-      System.out.println(result);
-    } catch (ApiException e) {
-      System.err.println("Exception when calling CrashRiskApi#crashHistoryUsingGET");
-      System.err.println("Status code: " + e.getCode());
-      System.err.println("Reason: " + e.getResponseBody());
-      System.err.println("Response headers: " + e.getResponseHeaders());
-      e.printStackTrace();
-    }
-  }
-}
-```
-
-### Parameters
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **successTrackId** | **String**|  | |
-| **customerId** | **String**| customerId | |
-| **assetIdBase64** | **String**| base64 encoded value of the assetId | |
 
 ### Return type
 
@@ -204,7 +68,7 @@ public class Example {
 
 ### Authorization
 
-No authorization required
+[oAuth2](../README.md#oAuth2)
 
 ### HTTP request headers
 
@@ -214,18 +78,22 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | OK |  * Date -  <br>  |
-| **401** | Unauthorized |  * Date -  <br>  |
-| **403** | Forbidden |  * Date -  <br>  |
-| **404** | Not Found |  * Date -  <br>  |
+| **200** | OK |  -  |
+| **400** | Bad Request |  -  |
+| **401** | Unauthorized |  -  |
+| **403** | Forbidden |  -  |
+| **404** | Not found |  -  |
+| **500** | Internal server error |  -  |
+| **503** | Service Unavailable |  -  |
+| **504** | Gateway timeout |  -  |
 
-<a name="crashRiskAssetsUsingGet"></a>
-# **crashRiskAssetsUsingGet**
-> CrashRiskDevices crashRiskAssetsUsingGet(successTrackId, customerId, offset, max)
+<a id="getCrashRiskAssetRiskFactors"></a>
+# **getCrashRiskAssetRiskFactors**
+> DeviceRiskFactorsResponse getCrashRiskAssetRiskFactors(successTrackId, customerId, assetUniqueId)
 
-Get devices which are at risk of crash owned by a customer, sorted by risk score in descending order by default
+List crash risk asset risk factors
 
-This API provides details of the devices that have a probability of crash with crash score rating as High, Medium and Low. Default sorting is End date
+List factors that contribute to an asset&#39;s crash risk score.
 
 ### Example
 ```java
@@ -233,24 +101,28 @@ This API provides details of the devices that have a probability of crash with c
 import com.cisco.px.client.ApiClient;
 import com.cisco.px.client.ApiException;
 import com.cisco.px.client.Configuration;
+import com.cisco.px.client.auth.*;
 import com.cisco.px.client.models.*;
 import com.cisco.px.client.api.CrashRiskApi;
 
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("https://api-cx.cisco.com/px");
+    defaultClient.setBasePath("https://api-cx.cisco.com/sandbox/px");
+    
+    // Configure OAuth2 access token for authorization: oAuth2
+    OAuth oAuth2 = (OAuth) defaultClient.getAuthentication("oAuth2");
+    oAuth2.setAccessToken("YOUR ACCESS TOKEN");
 
     CrashRiskApi apiInstance = new CrashRiskApi(defaultClient);
     String successTrackId = "successTrackId_example"; // String | 
-    String customerId = "customerId_example"; // String | 
-    Integer offset = 1; // Integer | 
-    Integer max = 10; // Integer | 
+    String customerId = "customerId_example"; // String | Unique identifier of the customer
+    String assetUniqueId = "assetUniqueId_example"; // String | assetId encoded as a Base64 string. This parameter is available as a response parameter of the /crashRisk/assets API
     try {
-      CrashRiskDevices result = apiInstance.crashRiskAssetsUsingGet(successTrackId, customerId, offset, max);
+      DeviceRiskFactorsResponse result = apiInstance.getCrashRiskAssetRiskFactors(successTrackId, customerId, assetUniqueId);
       System.out.println(result);
     } catch (ApiException e) {
-      System.err.println("Exception when calling CrashRiskApi#crashRiskAssetsUsingGet");
+      System.err.println("Exception when calling CrashRiskApi#getCrashRiskAssetRiskFactors");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -265,17 +137,16 @@ public class Example {
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **successTrackId** | **String**|  | |
-| **customerId** | **String**|  | |
-| **offset** | **Integer**|  | [optional] [default to 1] |
-| **max** | **Integer**|  | [optional] [default to 10] |
+| **customerId** | **String**| Unique identifier of the customer | |
+| **assetUniqueId** | **String**| assetId encoded as a Base64 string. This parameter is available as a response parameter of the /crashRisk/assets API | |
 
 ### Return type
 
-[**CrashRiskDevices**](CrashRiskDevices.md)
+[**DeviceRiskFactorsResponse**](DeviceRiskFactorsResponse.md)
 
 ### Authorization
 
-No authorization required
+[oAuth2](../README.md#oAuth2)
 
 ### HTTP request headers
 
@@ -285,19 +156,22 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Ok |  * Date -  <br>  |
-| **400** | Bad Request |  * Date -  <br>  |
-| **401** | Unauthorized |  * Date -  <br>  |
-| **403** | Forbidden error |  * Date -  <br>  |
-| **404** | Not Found |  * Date -  <br>  |
+| **200** | Ok |  -  |
+| **400** | Bad Request |  -  |
+| **401** | Unauthorized |  -  |
+| **403** | Forbidden |  -  |
+| **404** | Not found |  -  |
+| **500** | Internal server error |  -  |
+| **503** | Service Unavailable |  -  |
+| **504** | Gateway timeout |  -  |
 
-<a name="similarAssetsUsingGet"></a>
-# **similarAssetsUsingGet**
-> SimilarDevices similarAssetsUsingGet(successTrackId, customerId, assetIdBase64, similarityCriteria, offset, max)
+<a id="getCrashRiskAssetSimilarAssets"></a>
+# **getCrashRiskAssetSimilarAssets**
+> SimilarDevices getCrashRiskAssetSimilarAssets(customerId, assetUniqueId, successTrackId, similarityCriteria, max, offset)
 
-Get similar assets based on the similarity score
+List crash risk asset similar assets
 
-This API provides details of other devices in the network that are similar to the current device pre in terms of features , prodict familiy and hardware. Default sort is similarityScore
+List other devices in the network that are similar to a device in terms of features , product family, and hardware.
 
 ### Example
 ```java
@@ -305,26 +179,31 @@ This API provides details of other devices in the network that are similar to th
 import com.cisco.px.client.ApiClient;
 import com.cisco.px.client.ApiException;
 import com.cisco.px.client.Configuration;
+import com.cisco.px.client.auth.*;
 import com.cisco.px.client.models.*;
 import com.cisco.px.client.api.CrashRiskApi;
 
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("https://api-cx.cisco.com/px");
+    defaultClient.setBasePath("https://api-cx.cisco.com/sandbox/px");
+    
+    // Configure OAuth2 access token for authorization: oAuth2
+    OAuth oAuth2 = (OAuth) defaultClient.getAuthentication("oAuth2");
+    oAuth2.setAccessToken("YOUR ACCESS TOKEN");
 
     CrashRiskApi apiInstance = new CrashRiskApi(defaultClient);
+    String customerId = "customerId_example"; // String | Unique identifier of the customer
+    String assetUniqueId = "assetUniqueId_example"; // String | assetId encoded as a Base64 string. This parameter is available as a response parameter of the /crashRisk/assets API
     String successTrackId = "successTrackId_example"; // String | 
-    String customerId = "customerId_example"; // String | 
-    String assetIdBase64 = "assetIdBase64_example"; // String | base64 encoded value of the assetId
-    String similarityCriteria = "similarityCriteria_example"; // String | should be one of the following values features,fingerprint,softwares_features
-    Integer offset = 1; // Integer | 
-    Integer max = 10; // Integer | 
+    String similarityCriteria = "features"; // String | Criteria used to determine whether an asset is similar to the specified asset.
+    Integer max = 10; // Integer | The maximum number of items to return. The default value is 10.
+    Integer offset = 1; // Integer | The number of items to skip before starting to collect the result set. The default value is 1.
     try {
-      SimilarDevices result = apiInstance.similarAssetsUsingGet(successTrackId, customerId, assetIdBase64, similarityCriteria, offset, max);
+      SimilarDevices result = apiInstance.getCrashRiskAssetSimilarAssets(customerId, assetUniqueId, successTrackId, similarityCriteria, max, offset);
       System.out.println(result);
     } catch (ApiException e) {
-      System.err.println("Exception when calling CrashRiskApi#similarAssetsUsingGet");
+      System.err.println("Exception when calling CrashRiskApi#getCrashRiskAssetSimilarAssets");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -338,12 +217,12 @@ public class Example {
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
+| **customerId** | **String**| Unique identifier of the customer | |
+| **assetUniqueId** | **String**| assetId encoded as a Base64 string. This parameter is available as a response parameter of the /crashRisk/assets API | |
 | **successTrackId** | **String**|  | |
-| **customerId** | **String**|  | |
-| **assetIdBase64** | **String**| base64 encoded value of the assetId | |
-| **similarityCriteria** | **String**| should be one of the following values features,fingerprint,softwares_features | |
-| **offset** | **Integer**|  | [optional] [default to 1] |
-| **max** | **Integer**|  | [optional] [default to 10] |
+| **similarityCriteria** | **String**| Criteria used to determine whether an asset is similar to the specified asset. | [enum: features, fingerprint, software_features] |
+| **max** | **Integer**| The maximum number of items to return. The default value is 10. | [optional] [default to 10] |
+| **offset** | **Integer**| The number of items to skip before starting to collect the result set. The default value is 1. | [optional] [default to 1] |
 
 ### Return type
 
@@ -351,7 +230,7 @@ public class Example {
 
 ### Authorization
 
-No authorization required
+[oAuth2](../README.md#oAuth2)
 
 ### HTTP request headers
 
@@ -361,9 +240,168 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-| **200** | Ok |  * Date -  <br>  |
-| **400** | Bad Request |  * Date -  <br>  |
-| **401** | Unauthorized |  * Date -  <br>  |
-| **403** | Forbidden error |  * Date -  <br>  |
-| **404** | Not Found |  * Date -  <br>  |
+| **200** | Ok |  -  |
+| **400** | Bad Request |  -  |
+| **401** | Unauthorized |  -  |
+| **403** | Forbidden |  -  |
+| **404** | Not found |  -  |
+| **500** | Internal server error |  -  |
+| **503** | Service Unavailable |  -  |
+| **504** | Gateway timeout |  -  |
+
+<a id="getCrashRiskAssets"></a>
+# **getCrashRiskAssets**
+> CrashRiskDevices getCrashRiskAssets(customerId, successTrackId, max, offset)
+
+List assets at risk of crashing
+
+List devices that have a probability of crash, including risk score rating (&#x60;High&#x60;, &#x60;Medium&#x60;, &#x60;Low&#x60;).
+
+### Example
+```java
+// Import classes:
+import com.cisco.px.client.ApiClient;
+import com.cisco.px.client.ApiException;
+import com.cisco.px.client.Configuration;
+import com.cisco.px.client.auth.*;
+import com.cisco.px.client.models.*;
+import com.cisco.px.client.api.CrashRiskApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("https://api-cx.cisco.com/sandbox/px");
+    
+    // Configure OAuth2 access token for authorization: oAuth2
+    OAuth oAuth2 = (OAuth) defaultClient.getAuthentication("oAuth2");
+    oAuth2.setAccessToken("YOUR ACCESS TOKEN");
+
+    CrashRiskApi apiInstance = new CrashRiskApi(defaultClient);
+    String customerId = "customerId_example"; // String | Unique identifier of the customer
+    String successTrackId = "successTrackId_example"; // String | 
+    Integer max = 10; // Integer | The maximum number of items to return. The default value is 10.
+    Integer offset = 1; // Integer | The number of items to skip before starting to collect the result set. The default value is 1.
+    try {
+      CrashRiskDevices result = apiInstance.getCrashRiskAssets(customerId, successTrackId, max, offset);
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling CrashRiskApi#getCrashRiskAssets");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **customerId** | **String**| Unique identifier of the customer | |
+| **successTrackId** | **String**|  | |
+| **max** | **Integer**| The maximum number of items to return. The default value is 10. | [optional] [default to 10] |
+| **offset** | **Integer**| The number of items to skip before starting to collect the result set. The default value is 1. | [optional] [default to 1] |
+
+### Return type
+
+[**CrashRiskDevices**](CrashRiskDevices.md)
+
+### Authorization
+
+[oAuth2](../README.md#oAuth2)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+| **400** | Bad Request |  -  |
+| **401** | Unauthorized |  -  |
+| **403** | Forbidden |  -  |
+| **404** | Not found |  -  |
+| **500** | Internal server error |  -  |
+| **503** | Service Unavailable |  -  |
+| **504** | Gateway timeout |  -  |
+
+<a id="listCrashRiskAssetsCrashed"></a>
+# **listCrashRiskAssetsCrashed**
+> InventoryCrashDetails listCrashRiskAssetsCrashed(customerId, successTrackId, timePeriod)
+
+List assets which have crashed
+
+### Example
+```java
+// Import classes:
+import com.cisco.px.client.ApiClient;
+import com.cisco.px.client.ApiException;
+import com.cisco.px.client.Configuration;
+import com.cisco.px.client.auth.*;
+import com.cisco.px.client.models.*;
+import com.cisco.px.client.api.CrashRiskApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("https://api-cx.cisco.com/sandbox/px");
+    
+    // Configure OAuth2 access token for authorization: oAuth2
+    OAuth oAuth2 = (OAuth) defaultClient.getAuthentication("oAuth2");
+    oAuth2.setAccessToken("YOUR ACCESS TOKEN");
+
+    CrashRiskApi apiInstance = new CrashRiskApi(defaultClient);
+    String customerId = "customerId_example"; // String | Unique identifier of the customer
+    String successTrackId = "successTrackId_example"; // String | 
+    Integer timePeriod = 56; // Integer | Filter results by X number of days in the past - valid range 1-99.
+    try {
+      InventoryCrashDetails result = apiInstance.listCrashRiskAssetsCrashed(customerId, successTrackId, timePeriod);
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling CrashRiskApi#listCrashRiskAssetsCrashed");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **customerId** | **String**| Unique identifier of the customer | |
+| **successTrackId** | **String**|  | |
+| **timePeriod** | **Integer**| Filter results by X number of days in the past - valid range 1-99. | [optional] |
+
+### Return type
+
+[**InventoryCrashDetails**](InventoryCrashDetails.md)
+
+### Authorization
+
+[oAuth2](../README.md#oAuth2)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+| **400** | Bad Request |  -  |
+| **401** | Unauthorized |  -  |
+| **403** | Forbidden |  -  |
+| **404** | Not found |  -  |
+| **500** | Internal server error |  -  |
+| **503** | Service Unavailable |  -  |
+| **504** | Gateway timeout |  -  |
 

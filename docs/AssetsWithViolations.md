@@ -7,6 +7,7 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
+|**sourceSystemId** | **String** |  |  [optional] |
 |**assetId** | **String** |  |  [optional] |
 |**assetName** | **String** |  |  [optional] |
 |**ipAddress** | **String** |  |  [optional] |
@@ -18,6 +19,8 @@
 |**violationCount** | **Long** |  |  [optional] |
 |**scanStatus** | **Boolean** |  |  [optional] |
 |**severityId** | **String** |  |  [optional] |
+|**role** | **String** |  |  [optional] |
+|**assetGroups** | **List&lt;String&gt;** |  |  [optional] |
 
 
 
